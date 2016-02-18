@@ -26,19 +26,17 @@ namespace CsWebIopi
         {
             m_gpioController = new GpioController(ip, port, userId, password);
             m_gpioController.AllOff();
+
             if (runTestSequence)
             {
                 SimpleLogger.Log("To assist in checking your wiring, we'll run through a few tests of your rig . . .");
+
                 m_gpioController.BlinkAll(s_ErrorDelay);
-                m_isErrorState = true;
                 Thread.Sleep(1000);
                 SimpleLogger.Log("All LEDs should be blinking - Press any key to continue . . .");
                 Console.ReadKey();
                 m_gpioController.StopBlinking();
-
-                m_isErrorState = false;
-                m_gpioController.AllOff();
-
+                
                 SimpleLogger.Log("Setting Available ", m_gpioController.SetAvailable());
                 SimpleLogger.Log("Available LED should be lit, all others should be off - Press any key to continue . . .");
                 Console.ReadKey();
@@ -73,6 +71,8 @@ namespace CsWebIopi
             // Set the initial state of the LED (ContactInformationChanged does not fire on subscription)
             SetLedState();
         }
+
+        
 
         /// <summary>
         ///     Called when <see cref="ThreadSafeDisposableBase.Dispose" /> is invoked. Thread safe and provides guarantees that the method will never be called more than once or throw
@@ -186,7 +186,7 @@ namespace CsWebIopi
             // off, so we prevent that here.
             if (m_isGoingToSleep)
                 return;
-
+            
             if (e.ChangedContactInformation.Contains(ContactInformationType.Availability))
                 SetLedState();
         }
