@@ -182,6 +182,9 @@ namespace CsWebIopi
 
         private void ContactOnContactInformationChanged(object sender, ContactInformationChangedEventArgs e)
         {
+            // Note that "sender" is the Contact object that the change occurred on.  We don't care about it for
+            // this solution since we're only subscribing to the Self contact.
+
             // If we detect the suspend operation before the client does, this event will fire after we've turned the lights
             // off, so we prevent that here.
             if (m_isGoingToSleep)
